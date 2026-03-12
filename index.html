@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Interview Update</title>
+</head>
+
+<body>
+
+<h2>Paste Interview Message</h2>
+
+<textarea id="text" rows="12" cols="80"></textarea>
+
+<br><br>
+
+<button onclick="send()">Submit</button>
+
+<script>
+async function send(){
+
+ const text = document.getElementById("text").value;
+
+ await fetch("https://YOUR_DOMAIN/webhook/interview-update",{
+  method:"POST",
+  headers:{
+   "Content-Type":"application/json"
+  },
+  body: JSON.stringify({ text })
+ });
+
+ alert("Interview data updated!");
+}
+</script>
+
+</body>
+</html>
