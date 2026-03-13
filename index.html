@@ -2,33 +2,82 @@
 <html>
 <head>
 <title>Interview Update</title>
+
+<style>
+body{
+ font-family: Arial;
+ padding:40px;
+}
+
+textarea{
+ width:600px;
+ height:200px;
+}
+
+button{
+ margin-top:10px;
+ padding:8px 16px;
+ font-size:16px;
+}
+
+#status{
+ margin-top:15px;
+ font-weight:bold;
+}
+</style>
+
 </head>
 
 <body>
 
 <h2>Paste Interview Message</h2>
 
-<textarea id="text" rows="12" cols="80"></textarea>
+<textarea id="text" placeholder="Paste the WhatsApp interview update here..."></textarea>
 
-<br><br>
+<br>
 
 <button onclick="send()">Submit</button>
 
+<div id="status"></div>
+
 <script>
+
 async function send(){
 
  const text = document.getElementById("text").value;
+ const status = document.getElementById("status");
 
- await fetch("https://YOUR_DOMAIN/webhook/interview-update",{
-  method:"POST",
-  headers:{
-   "Content-Type":"application/json"
-  },
-  body: JSON.stringify({ text })
- });
+ if(!text.trim()){
+  status.innerHTML = "⚠ Please paste the interview message.";
+  return;
+ }
 
- alert("Interview data updated!");
+ status.innerHTML = "Submitting... ⏳";
+
+ try{
+
+  await fetch("http://localhost:5678/webhook/interview-update",{
+   method:"POST",
+   headers:{
+    "Content-Type":"application/json"
+   },
+   body: JSON.stringify({ text })
+  });
+
+  status.innerHTML = "✅ Data updated successfully!";
+  
+  // Clear textbox
+  document.getElementById("text").value = "";
+
+ }
+ catch(err){
+
+  status.innerHTML = "❌ Error sending data.";
+
+ }
+
 }
+
 </script>
 
 </body>
